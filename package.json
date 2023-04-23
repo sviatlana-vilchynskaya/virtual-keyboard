@@ -29,8 +29,10 @@
     "css-loader": "^6.7.3",
     "eslint": "^8.39.0",
     "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
     "file-loader": "^6.2.0",
+    "sass": "^1.62.0",
     "sass-loader": "^13.2.2",
     "style-loader": "^3.3.2",
     "webpack-dev-server": "^4.13.3"
