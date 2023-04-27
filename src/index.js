@@ -54,10 +54,50 @@ class Keyboard {
 
     this.keyboard.addEventListener('click', (event) => {
       const button = event.target;
+      const cursorPosition = this.textarea.selectionStart;
+      this.textarea.focus();
 
       if (button.tagName === 'BUTTON') {
         const value = button.getAttribute('data-lang-en');
+        const buttonDataCode = button.getAttribute('data-code');
         const funcBoolean = button.getAttribute('func');
+
+        if (funcBoolean === 'true' && buttonDataCode === 'Backspace') {
+          this.textarea.value = this.textarea.value.slice(0, -1);
+        }
+
+        if (funcBoolean === 'true' && buttonDataCode === 'ArrowRight') {
+          this.textarea.setSelectionRange(
+            cursorPosition + 1,
+            cursorPosition + 1
+          );
+        }
+        if (funcBoolean === 'true' && buttonDataCode === 'ArrowLeft') {
+          this.textarea.setSelectionRange(
+            cursorPosition - 1,
+            cursorPosition - 1
+          );
+        }
+        if (funcBoolean === 'true' && buttonDataCode === 'ArrowUp') {
+          const textBeforeCursor = this.textarea.value.substring(
+            0,
+            cursorPosition
+          );
+          const previousNewLinePosition = textBeforeCursor.lastIndexOf('n');
+          const newCursorPosition =
+            previousNewLinePosition === -1 ? 0 : previousNewLinePosition + 1;
+          this.textarea.setSelectionRange(newCursorPosition, newCursorPosition);
+        }
+        if (funcBoolean === 'true' && buttonDataCode === 'ArrowDown') {
+          const textAfterCursor = this.textarea.value.substring(cursorPosition);
+          const nextNewLinePosition = textAfterCursor.indexOf('n');
+          const newCursorPosition =
+            nextNewLinePosition === -1
+              ? this.textarea.value.length
+              : cursorPosition + nextNewLinePosition + 1;
+          this.textarea.setSelectionRange(newCursorPosition, newCursorPosition);
+        }
+
         if (funcBoolean === 'false') {
           this.textarea.value += value;
         }
@@ -69,4 +109,5 @@ class Keyboard {
 window.addEventListener('DOMContentLoaded', () => {
   const virtualKeyboard = new Keyboard();
   virtualKeyboard.init();
+  virtualKeyboard.textarea.focus();
 });

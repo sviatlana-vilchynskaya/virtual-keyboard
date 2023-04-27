@@ -77,15 +77,26 @@ body {
       .keyboard__button {
         height: 50px;
         font-family: 'Poppins', sans-serif;
-        color: $primary-dark;
-        font-weight: 400;
+        color: $primary;
+        font-weight: 600;
         background-color: $greyLight-1;
         box-shadow: $shadow;
         border-radius: 0.5rem;
         border: none;
         font-size: 15px;
         cursor: pointer;
+        // &:active {
+        //   box-shadow: $inner-shadow;
+
+        //   color: $primary-dark;
+        // }
       }
+      .active {
+        box-shadow: $inner-shadow;
+
+        color: $primary-dark;
+      }
+
       .keyboard__button-regular {
         width: 50px;
         height: 50px;
