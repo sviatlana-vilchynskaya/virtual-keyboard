@@ -63,7 +63,27 @@ class Keyboard {
         const funcBoolean = button.getAttribute('func');
 
         if (funcBoolean === 'true' && buttonDataCode === 'Backspace') {
-          this.textarea.value = this.textarea.value.slice(0, -1);
+          if (cursorPosition > 0) {
+            const value = this.textarea.value;
+            const newValue =
+              value.slice(0, cursorPosition - 1) + value.slice(cursorPosition);
+            this.textarea.value = newValue;
+            this.textarea.setSelectionRange(
+              cursorPosition - 1,
+              cursorPosition - 1
+            );
+          }
+        }
+
+        if (funcBoolean === 'true' && buttonDataCode === 'Enter') {
+          const lineBreakIndex = value.indexOf('n', cursorPosition);
+          const nextLineBreakIndex = value.indexOf('n', lineBreakIndex + 1);
+          const nextCursorPosition =
+            nextLineBreakIndex !== -1 ? nextLineBreakIndex : value.length;
+          this.textarea.setSelectionRange(
+            nextCursorPosition,
+            nextCursorPosition
+          );
         }
 
         if (funcBoolean === 'true' && buttonDataCode === 'ArrowRight') {
@@ -88,6 +108,7 @@ class Keyboard {
             previousNewLinePosition === -1 ? 0 : previousNewLinePosition + 1;
           this.textarea.setSelectionRange(newCursorPosition, newCursorPosition);
         }
+
         if (funcBoolean === 'true' && buttonDataCode === 'ArrowDown') {
           const textAfterCursor = this.textarea.value.substring(cursorPosition);
           const nextNewLinePosition = textAfterCursor.indexOf('n');
