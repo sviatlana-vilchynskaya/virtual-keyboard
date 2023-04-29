@@ -69,11 +69,9 @@ body {
     .keyboard__row {
       display: flex;
       gap: 10px;
-      margin-bottom: 10px;
-      justify-content: center;
-      &:last-child {
-        margin-left: 61px;
-      }
+      margin: 0 auto 10px auto;
+      justify-content: start;
+      width: 92%;
       .keyboard__button {
         height: 50px;
         font-family: 'Poppins', sans-serif;
@@ -106,6 +104,9 @@ body {
       }
       .keyboard__button-extra-wide {
         width: 90px;
+      }
+      .keyboard__button-average-wide {
+        width: 103px;
       }
       .keyboard__button-ultra-wide {
         width: 124px;

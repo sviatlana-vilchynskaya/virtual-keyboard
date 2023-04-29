@@ -53,8 +53,8 @@ class Keyboard {
     });
 
     this.keyboard.addEventListener('click', (event) => {
-      const button = event.target;
       const cursorPosition = this.textarea.selectionStart;
+      const button = event.target;
       this.textarea.focus();
 
       if (button.tagName === 'BUTTON') {
@@ -76,14 +76,23 @@ class Keyboard {
         }
 
         if (funcBoolean === 'true' && buttonDataCode === 'Enter') {
-          const lineBreakIndex = value.indexOf('n', cursorPosition);
-          const nextLineBreakIndex = value.indexOf('n', lineBreakIndex + 1);
-          const nextCursorPosition =
-            nextLineBreakIndex !== -1 ? nextLineBreakIndex : value.length;
-          this.textarea.setSelectionRange(
-            nextCursorPosition,
-            nextCursorPosition
-          );
+          event.preventDefault();
+          const start = this.textarea.selectionStart;
+          const end = this.textarea.selectionEnd;
+          const value = this.textarea.value;
+          this.textarea.value =
+            value.substring(0, start) + '\n' + value.substring(end);
+          this.textarea.selectionStart = this.textarea.selectionEnd = start + 1;
+        }
+
+        if (funcBoolean === 'true' && buttonDataCode === 'Delete') {
+          const value = this.textarea.value;
+          if (cursorPosition < value.length) {
+            const newValue =
+              value.slice(0, cursorPosition) + value.slice(cursorPosition + 1);
+            this.textarea.value = newValue;
+            this.textarea.setSelectionRange(cursorPosition, cursorPosition);
+          }
         }
 
         if (funcBoolean === 'true' && buttonDataCode === 'ArrowRight') {

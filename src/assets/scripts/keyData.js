@@ -150,7 +150,7 @@ const keyData = [
         en: '⌫ Backspace',
         ru: '⌫ Backspace',
       },
-      width: 'wide',
+      width: 'average-wide',
     },
   ],
 
@@ -584,6 +584,15 @@ const keyData = [
       lang: {
         en: '⯅',
         ru: '⯅',
+      },
+      width: 'regular',
+    },
+    {
+      code: 'Delete',
+      func: true,
+      lang: {
+        en: 'Del',
+        ru: 'Del',
       },
       width: 'regular',
     },
