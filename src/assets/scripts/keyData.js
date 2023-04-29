@@ -315,6 +315,8 @@ const keyData = [
       lang: {
         en: 'Caps Lock',
         ru: 'Caps Lock',
+        enShift: 'Caps Lock',
+        ruShift: 'Caps Lock',
       },
       width: 'extra-wide',
     },
@@ -445,6 +447,8 @@ const keyData = [
       lang: {
         en: '↩ Enter',
         ru: '↩ Enter',
+        enShift: '↩ Enter',
+        ruShift: '↩ Enter',
       },
       width: 'ultra-wide',
     },
@@ -456,6 +460,8 @@ const keyData = [
       lang: {
         en: '⇧ Shift',
         ru: '⇧ Shift',
+        enShift: '⇧ Shift',
+        ruShift: '⇧ Shift',
       },
       width: 'ultra-wide',
     },

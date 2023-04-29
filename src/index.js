@@ -47,27 +47,42 @@ class Keyboard {
         buttonElement.setAttribute('func', buttonData.func);
         buttonElement.classList.add(`keyboard__button-${buttonData.width}`);
         buttonElement.textContent = buttonData.lang.en;
+
         rowElement.appendChild(buttonElement);
       });
       this.keyboard.appendChild(rowElement);
     });
 
     this.keyboard.addEventListener('click', (event) => {
-      const cursorPosition = this.textarea.selectionStart;
       const button = event.target;
+      const value = button.getAttribute('data-lang-en');
+      const buttonDataCode = button.getAttribute('data-code');
+      const funcBoolean = button.getAttribute('func');
+      const textareaValue = this.textarea.value;
+      const cursorPosition = this.textarea.selectionStart;
+      const cursorPositionEnd = this.textarea.selectionEnd;
+      const textBeforeCursor = this.textarea.value.substring(0, cursorPosition);
+      const previousNewLinePosition = textBeforeCursor.lastIndexOf('n');
+      const newCursorPositionUp =
+        previousNewLinePosition === -1 ? 0 : previousNewLinePosition + 1;
+      const textAfterCursor = this.textarea.value.substring(cursorPosition);
+      const nextNewLinePosition = textAfterCursor.indexOf('n');
+      const newCursorPositionDown =
+        nextNewLinePosition === -1
+          ? this.textarea.value.length
+          : cursorPosition + nextNewLinePosition + 1;
+      const newValueBaskspace =
+        textareaValue.slice(0, cursorPosition - 1) +
+        textareaValue.slice(cursorPosition);
+      const newValueDelete =
+        textareaValue.slice(0, cursorPosition) +
+        textareaValue.slice(cursorPosition + 1);
       this.textarea.focus();
 
       if (button.tagName === 'BUTTON') {
-        const value = button.getAttribute('data-lang-en');
-        const buttonDataCode = button.getAttribute('data-code');
-        const funcBoolean = button.getAttribute('func');
-
-        if (funcBoolean === 'true' && buttonDataCode === 'Backspace') {
+        if (buttonDataCode === 'Backspace') {
           if (cursorPosition > 0) {
-            const value = this.textarea.value;
-            const newValue =
-              value.slice(0, cursorPosition - 1) + value.slice(cursorPosition);
-            this.textarea.value = newValue;
+            this.textarea.value = newValueBaskspace;
             this.textarea.setSelectionRange(
               cursorPosition - 1,
               cursorPosition - 1
@@ -75,57 +90,55 @@ class Keyboard {
           }
         }
 
-        if (funcBoolean === 'true' && buttonDataCode === 'Enter') {
-          event.preventDefault();
-          const start = this.textarea.selectionStart;
-          const end = this.textarea.selectionEnd;
-          const value = this.textarea.value;
-          this.textarea.value =
-            value.substring(0, start) + '\n' + value.substring(end);
-          this.textarea.selectionStart = this.textarea.selectionEnd = start + 1;
+        if (buttonDataCode === 'Tab') {
+          this.textarea.value = `${textareaValue.substring(
+            0,
+            cursorPosition
+          )}\t${textareaValue.substring(cursorPositionEnd)}`;
+          this.textarea.selectionStart = this.textarea.selectionEnd;
+          this.textarea.selectionEnd = cursorPosition + 1;
         }
 
-        if (funcBoolean === 'true' && buttonDataCode === 'Delete') {
-          const value = this.textarea.value;
-          if (cursorPosition < value.length) {
-            const newValue =
-              value.slice(0, cursorPosition) + value.slice(cursorPosition + 1);
-            this.textarea.value = newValue;
+        if (buttonDataCode === 'Enter') {
+          this.textarea.value = `${textareaValue.substring(
+            0,
+            cursorPosition
+          )}\n${textareaValue.substring(cursorPositionEnd)}`;
+          this.textarea.selectionStart = this.textarea.selectionEnd;
+          this.textarea.selectionEnd = cursorPosition + 1;
+        }
+
+        if (buttonDataCode === 'Delete') {
+          if (cursorPosition < textareaValue.length) {
+            this.textarea.value = newValueDelete;
             this.textarea.setSelectionRange(cursorPosition, cursorPosition);
           }
         }
 
-        if (funcBoolean === 'true' && buttonDataCode === 'ArrowRight') {
+        if (buttonDataCode === 'ArrowRight') {
           this.textarea.setSelectionRange(
             cursorPosition + 1,
             cursorPosition + 1
           );
         }
-        if (funcBoolean === 'true' && buttonDataCode === 'ArrowLeft') {
+        if (buttonDataCode === 'ArrowLeft') {
           this.textarea.setSelectionRange(
             cursorPosition - 1,
             cursorPosition - 1
           );
         }
-        if (funcBoolean === 'true' && buttonDataCode === 'ArrowUp') {
-          const textBeforeCursor = this.textarea.value.substring(
-            0,
-            cursorPosition
+        if (buttonDataCode === 'ArrowUp') {
+          this.textarea.setSelectionRange(
+            newCursorPositionUp,
+            newCursorPositionUp
           );
-          const previousNewLinePosition = textBeforeCursor.lastIndexOf('n');
-          const newCursorPosition =
-            previousNewLinePosition === -1 ? 0 : previousNewLinePosition + 1;
-          this.textarea.setSelectionRange(newCursorPosition, newCursorPosition);
         }
 
-        if (funcBoolean === 'true' && buttonDataCode === 'ArrowDown') {
-          const textAfterCursor = this.textarea.value.substring(cursorPosition);
-          const nextNewLinePosition = textAfterCursor.indexOf('n');
-          const newCursorPosition =
-            nextNewLinePosition === -1
-              ? this.textarea.value.length
-              : cursorPosition + nextNewLinePosition + 1;
-          this.textarea.setSelectionRange(newCursorPosition, newCursorPosition);
+        if (buttonDataCode === 'ArrowDown') {
+          this.textarea.setSelectionRange(
+            newCursorPositionDown,
+            newCursorPositionDown
+          );
         }
 
         if (funcBoolean === 'false') {
