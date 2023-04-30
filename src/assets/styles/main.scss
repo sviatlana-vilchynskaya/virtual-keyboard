@@ -38,7 +38,7 @@ body {
   }
 
   .main__textarea {
-    width: 80%;
+    width: 89%;
     resize: vertical;
     height: 4rem;
     border: none;
@@ -83,11 +83,15 @@ body {
         border: none;
         font-size: 15px;
         cursor: pointer;
-        // &:active {
-        //   box-shadow: $inner-shadow;
-
-        //   color: $primary-dark;
-        // }
+        &:hover {
+          background-color: $greyDark;
+          color: $greyLight-1;
+        }
+        &:active {
+          box-shadow: $inner-shadow;
+          background-color: $greyLight-1;
+          color: $primary-dark;
+        }
       }
       .active {
         box-shadow: $inner-shadow;

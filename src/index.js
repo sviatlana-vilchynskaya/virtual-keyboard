@@ -4,6 +4,7 @@ import keyData from './assets/scripts/keyData.js';
 class Keyboard {
   constructor() {
     this.caps = false;
+    this.shift = false;
     this.lang = localStorage.getItem('lang') === 'ru' ? 'ru' : 'en';
   }
 
@@ -24,15 +25,12 @@ class Keyboard {
 
     this.title.textContent = 'RSSchool Virtual keyboard';
     this.textarea.placeholder = 'Type anything...';
-    this.description.textContent =
-      'The keyboard was created in the Windows operating system.';
+    this.description.textContent = 'The keyboard was created in the Windows operating system.';
 
-    this.main.appendChild(this.title);
-    this.main.appendChild(this.textarea);
-    this.main.appendChild(this.keyboard);
-    this.keyboard.appendChild(this.description);
+    this.main.append(this.title, this.textarea, this.keyboard);
+    this.keyboard.append(this.description);
 
-    document.body.appendChild(this.main);
+    document.body.append(this.main);
 
     keyData.forEach((row) => {
       const rowElement = document.createElement('div');
@@ -44,18 +42,70 @@ class Keyboard {
         buttonElement.setAttribute('data-code', buttonData.code);
         buttonElement.setAttribute('data-lang-en', buttonData.lang.en);
         buttonElement.setAttribute('data-lang-ru', buttonData.lang.ru);
+        buttonElement.setAttribute(
+          'data-lang-enShift',
+          buttonData.lang.enShift,
+        );
+        buttonElement.setAttribute(
+          'data-lang-ruShift',
+          buttonData.lang.ruShift,
+        );
         buttonElement.setAttribute('func', buttonData.func);
         buttonElement.classList.add(`keyboard__button-${buttonData.width}`);
+
+        window.addEventListener('keydown', (event) => {
+          if (event.shiftKey) {
+            this.shift = true;
+            buttonElement.textContent = buttonData.lang.enShift;
+          }
+        });
+
+        window.addEventListener('keyup', (event) => {
+          if (!event.shiftKey) {
+            this.shift = false;
+            buttonElement.textContent = buttonData.lang.en;
+          }
+        });
+
+        this.keyboard.addEventListener('mousedown', (event) => {
+          const button = event.target;
+          const buttonDataCode = button.getAttribute('data-code');
+          if (
+            buttonDataCode === 'ShiftLeft'
+            || buttonDataCode === 'ShiftRight'
+          ) {
+            this.shift = true;
+            buttonElement.textContent = buttonData.lang.enShift;
+          }
+        });
+
+        this.keyboard.addEventListener('mouseup', (event) => {
+          const button = event.target;
+          const buttonDataCode = button.getAttribute('data-code');
+          if (
+            buttonDataCode === 'ShiftLight'
+            || buttonDataCode === 'ShiftRight'
+          ) {
+            this.shift = false;
+            buttonElement.textContent = buttonData.lang.en;
+          }
+        });
+
+        if (this.shift) {
+          buttonElement.textContent = buttonData.lang.enShift;
+        }
+
         buttonElement.textContent = buttonData.lang.en;
 
-        rowElement.appendChild(buttonElement);
+        rowElement.append(buttonElement);
       });
-      this.keyboard.appendChild(rowElement);
+      this.keyboard.append(rowElement);
     });
 
     this.keyboard.addEventListener('click', (event) => {
       const button = event.target;
       const value = button.getAttribute('data-lang-en');
+      const valueEnShift = button.getAttribute('data-lang-enShift');
       const buttonDataCode = button.getAttribute('data-code');
       const funcBoolean = button.getAttribute('func');
       const textareaValue = this.textarea.value;
@@ -63,20 +113,16 @@ class Keyboard {
       const cursorPositionEnd = this.textarea.selectionEnd;
       const textBeforeCursor = this.textarea.value.substring(0, cursorPosition);
       const previousNewLinePosition = textBeforeCursor.lastIndexOf('n');
-      const newCursorPositionUp =
-        previousNewLinePosition === -1 ? 0 : previousNewLinePosition + 1;
+      const newCursorPositionUp = previousNewLinePosition === -1 ? 0 : previousNewLinePosition + 1;
       const textAfterCursor = this.textarea.value.substring(cursorPosition);
       const nextNewLinePosition = textAfterCursor.indexOf('n');
-      const newCursorPositionDown =
-        nextNewLinePosition === -1
-          ? this.textarea.value.length
-          : cursorPosition + nextNewLinePosition + 1;
-      const newValueBaskspace =
-        textareaValue.slice(0, cursorPosition - 1) +
-        textareaValue.slice(cursorPosition);
-      const newValueDelete =
-        textareaValue.slice(0, cursorPosition) +
-        textareaValue.slice(cursorPosition + 1);
+      const newCursorPositionDown = nextNewLinePosition === -1
+        ? this.textarea.value.length
+        : cursorPosition + nextNewLinePosition + 1;
+      const newValueBaskspace = textareaValue.slice(0, cursorPosition - 1)
+        + textareaValue.slice(cursorPosition);
+      const newValueDelete = textareaValue.slice(0, cursorPosition)
+        + textareaValue.slice(cursorPosition + 1);
       this.textarea.focus();
 
       if (button.tagName === 'BUTTON') {
@@ -85,7 +131,7 @@ class Keyboard {
             this.textarea.value = newValueBaskspace;
             this.textarea.setSelectionRange(
               cursorPosition - 1,
-              cursorPosition - 1
+              cursorPosition - 1,
             );
           }
         }
@@ -93,7 +139,7 @@ class Keyboard {
         if (buttonDataCode === 'Tab') {
           this.textarea.value = `${textareaValue.substring(
             0,
-            cursorPosition
+            cursorPosition,
           )}\t${textareaValue.substring(cursorPositionEnd)}`;
           this.textarea.selectionStart = this.textarea.selectionEnd;
           this.textarea.selectionEnd = cursorPosition + 1;
@@ -102,7 +148,7 @@ class Keyboard {
         if (buttonDataCode === 'Enter') {
           this.textarea.value = `${textareaValue.substring(
             0,
-            cursorPosition
+            cursorPosition,
           )}\n${textareaValue.substring(cursorPositionEnd)}`;
           this.textarea.selectionStart = this.textarea.selectionEnd;
           this.textarea.selectionEnd = cursorPosition + 1;
@@ -110,6 +156,10 @@ class Keyboard {
 
         if (buttonDataCode === 'Delete') {
           if (cursorPosition < textareaValue.length) {
+            if (this.shift) {
+              this.textarea.valueEnShift = newValueDelete;
+              this.textarea.setSelectionRange(cursorPosition, cursorPosition);
+            }
             this.textarea.value = newValueDelete;
             this.textarea.setSelectionRange(cursorPosition, cursorPosition);
           }
@@ -118,30 +168,34 @@ class Keyboard {
         if (buttonDataCode === 'ArrowRight') {
           this.textarea.setSelectionRange(
             cursorPosition + 1,
-            cursorPosition + 1
+            cursorPosition + 1,
           );
         }
         if (buttonDataCode === 'ArrowLeft') {
           this.textarea.setSelectionRange(
             cursorPosition - 1,
-            cursorPosition - 1
+            cursorPosition - 1,
           );
         }
         if (buttonDataCode === 'ArrowUp') {
           this.textarea.setSelectionRange(
             newCursorPositionUp,
-            newCursorPositionUp
+            newCursorPositionUp,
           );
         }
 
         if (buttonDataCode === 'ArrowDown') {
           this.textarea.setSelectionRange(
             newCursorPositionDown,
-            newCursorPositionDown
+            newCursorPositionDown,
           );
         }
 
-        if (funcBoolean === 'false') {
+        if (this.shift && funcBoolean === 'false') {
+          this.textarea.value += valueEnShift;
+        }
+
+        if (this.shift === false && funcBoolean === 'false') {
           this.textarea.value += value;
         }
       }

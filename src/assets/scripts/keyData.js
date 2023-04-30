@@ -149,6 +149,8 @@ const keyData = [
       lang: {
         en: '⌫ Backspace',
         ru: '⌫ Backspace',
+        enShift: '⌫ Backspace',
+        ruShift: '⌫ Backspace',
       },
       width: 'average-wide',
     },
@@ -161,6 +163,8 @@ const keyData = [
       lang: {
         en: '↹ Tab',
         ru: '↹ Tab',
+        enShift: '↹ Tab',
+        ruShift: '↹ Tab',
       },
       width: 'regular-wide',
     },
@@ -581,6 +585,8 @@ const keyData = [
       lang: {
         en: '⇧ Shift',
         ru: '⇧ Shift',
+        enShift: '⇧ Shift',
+        ruShift: '⇧ Shift',
       },
       width: 'extra-wide',
     },
@@ -590,6 +596,8 @@ const keyData = [
       lang: {
         en: '⯅',
         ru: '⯅',
+        enShift: '⯅',
+        ruShift: '⯅',
       },
       width: 'regular',
     },
@@ -599,6 +607,8 @@ const keyData = [
       lang: {
         en: 'Del',
         ru: 'Del',
+        enShift: 'Del',
+        ruShift: 'Del',
       },
       width: 'regular',
     },
@@ -610,6 +620,8 @@ const keyData = [
       lang: {
         en: 'Ctrl',
         ru: 'Ctrl',
+        enShift: 'Ctrl',
+        ruShift: 'Ctrl',
       },
       width: 'extra-wide',
     },
@@ -619,6 +631,8 @@ const keyData = [
       lang: {
         en: '⊞',
         ru: '⊞',
+        enShift: '⊞',
+        ruShift: '⊞',
       },
       width: 'regular',
     },
@@ -628,6 +642,8 @@ const keyData = [
       lang: {
         en: 'Alt',
         ru: 'Alt',
+        enShift: 'Alt',
+        ruShift: 'Alt',
       },
       width: 'regular',
     },
@@ -637,6 +653,8 @@ const keyData = [
       lang: {
         en: ' ',
         ru: ' ',
+        enShift: ' ',
+        ruShift: ' ',
       },
       width: 'space',
     },
@@ -646,6 +664,8 @@ const keyData = [
       lang: {
         en: 'Alt',
         ru: 'Alt',
+        enShift: 'Alt',
+        ruShift: 'Alt',
       },
       width: 'regular',
     },
@@ -655,6 +675,8 @@ const keyData = [
       lang: {
         en: '▤',
         ru: '▤',
+        enShift: '▤',
+        ruShift: '▤',
       },
       width: 'regular',
     },
@@ -664,6 +686,8 @@ const keyData = [
       lang: {
         en: 'Ctrl',
         ru: 'Ctrl',
+        enShift: 'Ctrl',
+        ruShift: 'Ctrl',
       },
       width: 'extra-wide',
     },
@@ -673,6 +697,8 @@ const keyData = [
       lang: {
         en: '⯇',
         ru: '⯇',
+        enShift: '⯇',
+        ruShift: '⯇',
       },
       width: 'regular',
     },
@@ -682,6 +708,8 @@ const keyData = [
       lang: {
         en: '⯆',
         ru: '⯆',
+        enShift: '⯆',
+        ruShift: '⯆',
       },
       width: 'regular',
     },
@@ -691,6 +719,8 @@ const keyData = [
       lang: {
         en: '⯈',
         ru: '⯈',
+        enShift: '⯈',
+        ruShift: '⯈',
       },
       width: 'regular',
     },
