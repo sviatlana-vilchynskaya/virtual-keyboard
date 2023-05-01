@@ -50,6 +50,8 @@ class Keyboard {
           'data-lang-ruShift',
           buttonData.lang.ruShift,
         );
+        buttonElement.setAttribute('data-lang-enCaps', buttonData.lang.enCaps);
+        buttonElement.setAttribute('data-lang-ruCaps', buttonData.lang.ruCaps);
         buttonElement.setAttribute('func', buttonData.func);
         buttonElement.classList.add(`keyboard__button-${buttonData.width}`);
 
@@ -58,11 +60,23 @@ class Keyboard {
             this.shift = true;
             buttonElement.textContent = buttonData.lang.enShift;
           }
+          if (event.code === 'CapsLock') {
+            if (buttonData.func === false) {
+              buttonElement.textContent = buttonData.lang.enCaps;
+              this.caps = true;
+            }
+          }
         });
 
         window.addEventListener('keyup', (event) => {
-          if (!event.shiftKey) {
+          const dataCodeShift = 'ShiftLeft' || 'ShiftRight';
+          if (!event.shiftKey && event.code === dataCodeShift) {
             this.shift = false;
+            buttonElement.textContent = buttonData.lang.en;
+          }
+
+          if (event.getModifierState('CapsLock')) {
+            this.caps = false;
             buttonElement.textContent = buttonData.lang.en;
           }
         });
@@ -75,6 +89,11 @@ class Keyboard {
             this.shift = true;
             buttonElement.textContent = buttonData.lang.enShift;
           }
+
+          if (buttonDataCode === 'CapsLock') {
+            this.caps = true;
+            buttonElement.textContent = buttonData.lang.enCaps;
+          }
         });
 
         this.keyboard.addEventListener('mouseup', (event) => {
@@ -85,12 +104,23 @@ class Keyboard {
             this.shift = false;
             buttonElement.textContent = buttonData.lang.en;
           }
+
+          if (buttonDataCode === 'CapsLock') {
+            this.caps = false;
+            buttonElement.textContent = buttonData.lang.en;
+          }
         });
 
-        if (this.shift) {
+        if (this.shift && !this.caps) {
           buttonElement.textContent = buttonData.lang.enShift;
         }
+        if (this.caps && !this.shift) {
+          buttonElement.textContent = buttonData.lang.enCaps;
+        }
 
+        if (!this.caps || !this.shift) {
+          buttonElement.textContent = buttonData.lang.en;
+        }
         buttonElement.textContent = buttonData.lang.en;
 
         rowElement.append(buttonElement);
@@ -102,6 +132,7 @@ class Keyboard {
       const button = event.target;
       const value = button.getAttribute('data-lang-en');
       const valueEnShift = button.getAttribute('data-lang-enShift');
+      const valueEnCaps = button.getAttribute('data-lang-enCaps');
       const buttonDataCode = button.getAttribute('data-code');
       const funcBoolean = button.getAttribute('func');
       const textareaValue = this.textarea.value;
@@ -187,11 +218,15 @@ class Keyboard {
           );
         }
 
-        if (this.shift && funcBoolean === 'false') {
+        if (this.shift && !this.caps && funcBoolean === 'false') {
           this.textarea.value += valueEnShift;
         }
 
-        if (this.shift === false && funcBoolean === 'false') {
+        if (this.caps && !this.shift && funcBoolean === 'false') {
+          this.textarea.value += valueEnCaps;
+        }
+
+        if (!this.caps && !this.shift && funcBoolean === 'false') {
           this.textarea.value += value;
         }
       }
