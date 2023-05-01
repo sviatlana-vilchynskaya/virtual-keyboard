@@ -68,24 +68,20 @@ class Keyboard {
         });
 
         this.keyboard.addEventListener('mousedown', (event) => {
+          const dataCodeShift = 'ShiftLeft' || 'ShiftRight';
           const button = event.target;
           const buttonDataCode = button.getAttribute('data-code');
-          if (
-            buttonDataCode === 'ShiftLeft'
-            || buttonDataCode === 'ShiftRight'
-          ) {
+          if (buttonDataCode === dataCodeShift) {
             this.shift = true;
             buttonElement.textContent = buttonData.lang.enShift;
           }
         });
 
         this.keyboard.addEventListener('mouseup', (event) => {
+          const dataCodeShift = 'ShiftLeft' || 'ShiftRight';
           const button = event.target;
           const buttonDataCode = button.getAttribute('data-code');
-          if (
-            buttonDataCode === 'ShiftLight'
-            || buttonDataCode === 'ShiftRight'
-          ) {
+          if (buttonDataCode === dataCodeShift) {
             this.shift = false;
             buttonElement.textContent = buttonData.lang.en;
           }
